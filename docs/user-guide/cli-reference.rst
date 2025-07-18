@@ -33,7 +33,7 @@ These options apply to all OpenConvert commands:
 ``--host HOST``
   Specify the network host to connect to.
   
-  :Default: ``localhost``
+  :Default: ``network.openconvert.ai``
   :Example: ``--host convert.example.com``
 
 ``--port PORT``

@@ -110,8 +110,8 @@ For advanced use cases, you can use the low-level client directly:
        client = OpenConvertClient()
        
        try:
-           # Connect to network
-           await client.connect("localhost", 8765)
+           # Connect to network (default address)
+           await client.connect("network.openconvert.ai", 8765)
            
            # Discover available agents
            agents = await client.discover_agents()

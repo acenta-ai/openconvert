@@ -205,11 +205,11 @@ Network Configuration
 Default Connection
 ~~~~~~~~~~~~~~~~~~
 
-By default, OpenConvert connects to localhost:
+By default, OpenConvert connects to the OpenConvert network:
 
 .. code-block:: bash
 
-   # Uses localhost:8765
+   # Uses network.openconvert.ai:8765
    openconvert -i file.txt -o file.pdf
 
 Custom Network
