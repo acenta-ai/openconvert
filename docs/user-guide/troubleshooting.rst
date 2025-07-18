@@ -208,7 +208,11 @@ Import Errors
 
 .. code-block:: bash
 
-   # Reinstall in development mode
+   # For regular installation
+   pip uninstall openconvert
+   pip install openconvert
+   
+   # For development installation
    cd openconvert
    pip install -e .
    
@@ -230,7 +234,10 @@ Missing Dependencies
    # Install missing dependencies
    pip install pyyaml
    
-   # Or reinstall with dependencies
+   # Or reinstall OpenConvert (regular installation)
+   pip install --upgrade openconvert
+   
+   # Or reinstall with dependencies (development)
    pip install -e .
 
 Performance Issues

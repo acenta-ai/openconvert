@@ -22,7 +22,7 @@ The Python API is included when you install OpenConvert:
 
 .. code-block:: bash
 
-   pip install -e .
+   pip install openconvert
 
 API Reference
 -------------

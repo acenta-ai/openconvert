@@ -27,10 +27,26 @@ System Requirements
 Installation Methods
 --------------------
 
-From Source (Recommended)
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+From PyPI (Recommended)
+~~~~~~~~~~~~~~~~~~~~~~~
 
-Currently, OpenConvert is only available from source. Follow these steps:
+Install OpenConvert from PyPI using pip:
+
+.. code-block:: bash
+
+   # Install OpenConvert
+   pip install openconvert
+
+   # Verify installation
+   openconvert --help
+
+   # Check version
+   openconvert --version
+
+From Source (Development)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you plan to contribute to OpenConvert or need the latest development version:
 
 .. code-block:: bash
 
@@ -47,7 +63,7 @@ Currently, OpenConvert is only available from source. Follow these steps:
 Development Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you plan to contribute to OpenConvert, install the development dependencies:
+For contributors who need development dependencies:
 
 .. code-block:: bash
 
@@ -61,16 +77,22 @@ If you plan to contribute to OpenConvert, install the development dependencies:
    # Install pre-commit hooks
    pre-commit install
 
-From PyPI (Coming Soon)
-~~~~~~~~~~~~~~~~~~~~~~~
+Alternative Installation Methods
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. note::
-   PyPI installation will be available in a future release.
+**Using pipx (for isolated installation):**
 
 .. code-block:: bash
 
-   # Future installation method
-   pip install openconvert
+   # Install with pipx for isolated environment
+   pipx install openconvert
+
+**Using conda (if available):**
+
+.. code-block:: bash
+
+   # Future conda installation
+   conda install -c conda-forge openconvert
 
 Docker Installation (Planned)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

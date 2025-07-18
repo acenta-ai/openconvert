@@ -30,10 +30,8 @@ OpenConvert CLI is a command-line tool that connects to distributed OpenAgents n
 
 .. code-block:: bash
 
-   # Install from source
-   git clone https://github.com/openagents/openconvert.git
-   cd openconvert
-   pip install -e .
+   # Install OpenConvert
+   pip install openconvert
 
    # Convert your first file!
    openconvert -i document.txt -o document.pdf
