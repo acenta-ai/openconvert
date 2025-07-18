@@ -149,7 +149,7 @@ async def convert(
     from_format: Optional[str] = None,
     to_format: Optional[str] = None,
     prompt: Optional[str] = None,
-    host: str = "localhost",
+    host: str = "network.openconvert.ai",
     port: int = 8765
 ) -> bool:
     """Convert files using the OpenConvert network.
@@ -266,7 +266,7 @@ async def convert(
         await client.disconnect()
 
 
-async def list_available_formats(host: str = "localhost", port: int = 8765) -> bool:
+async def list_available_formats(host: str = "network.openconvert.ai", port: int = 8765) -> bool:
     """List all available conversion formats from connected agents.
     
     Args:
@@ -450,8 +450,8 @@ Supported formats include:
     # Network connection options
     parser.add_argument(
         "--host",
-        default="localhost",
-        help="OpenConvert network host (default: localhost)"
+        default="network.openconvert.ai",
+        help="OpenConvert network host (default: network.openconvert.ai)"
     )
     parser.add_argument(
         "--port",

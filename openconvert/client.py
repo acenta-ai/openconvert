@@ -49,7 +49,7 @@ class OpenConvertClient:
         
         logger.info(f"Initialized OpenConvert client with ID: {self.agent_id}")
     
-    async def connect(self, host: str = "localhost", port: int = 8765) -> bool:
+    async def connect(self, host: str = "network.openconvert.ai", port: int = 8765) -> bool:
         """Connect to the OpenConvert network.
         
         Args:
@@ -343,7 +343,7 @@ async def convert_file(
     source_format: Optional[str] = None,
     target_format: Optional[str] = None,
     prompt: Optional[str] = None,
-    host: str = "localhost",
+    host: str = "network.openconvert.ai",
     port: int = 8765
 ) -> bool:
     """Convenience function to convert a single file.

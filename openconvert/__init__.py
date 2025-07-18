@@ -26,7 +26,7 @@ def convert(
     from_format: Optional[str] = None,
     to_format: Optional[str] = None,
     prompt: Optional[str] = None,
-    host: str = "localhost",
+    host: str = "network.openconvert.ai",
     port: int = 8765
 ) -> bool:
     """Convert files using the OpenConvert network.
@@ -70,7 +70,7 @@ def convert_file(
     from_format: Optional[str] = None,
     to_format: Optional[str] = None,
     prompt: Optional[str] = None,
-    host: str = "localhost",
+    host: str = "network.openconvert.ai",
     port: int = 8765
 ) -> bool:
     """Convert a single file using the OpenConvert network.
