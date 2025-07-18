@@ -1,0 +1,2 @@
+# This file ensures the _static directory is included in git
+# Sphinx needs this directory for static files like CSS and images 
