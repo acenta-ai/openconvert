@@ -16,14 +16,29 @@ OpenConvert CLI is a command-line tool that connects to distributed OpenAgents n
 ✨ Key Features
 ---------------
 
-🔗 **Network-Powered** • Connect to OpenAgents conversion networks  
-🤖 **Prompt Support** • Use natural language prompts (agent-dependent)  
-📁 **Batch Processing** • Convert files and directories  
-🔍 **Auto-Detection** • Automatic MIME type detection  
-🛡️ **Error Handling** • Comprehensive error reporting  
-⚡ **Async Operations** • Non-blocking network operations  
-🔧 **Python API** • Import and use ``from openconvert import convert``  
-📊 **Format Discovery** • ``--list-formats`` to see available conversions  
+🔗 **Network-Powered**
+   Connect to OpenAgents conversion networks
+
+🤖 **Prompt Support**
+   Use natural language prompts (agent-dependent)
+
+📁 **Batch Processing**
+   Convert files and directories
+
+🔍 **Auto-Detection**
+   Automatic MIME type detection
+
+🛡️ **Error Handling**
+   Comprehensive error reporting
+
+⚡ **Async Operations**
+   Non-blocking network operations
+
+🔧 **Python API**
+   Import and use ``from openconvert import convert``
+
+📊 **Format Discovery**
+   ``--list-formats`` to see available conversions  
 
 🚀 Quick Start
 --------------
