@@ -87,6 +87,11 @@ def validate_args(args: argparse.Namespace) -> bool:
     Returns:
         bool: True if arguments are valid
     """
+    # For conversion operations, input and output are required
+    if not args.input or not args.output:
+        logger.error("Input (-i) and output (-o) arguments are required for conversion")
+        return False
+    
     # Check input exists
     input_path = Path(args.input)
     if not input_path.exists():
@@ -138,7 +143,7 @@ def get_input_files(input_path: Path, from_format: Optional[str] = None) -> List
     return []
 
 
-async def convert_files(
+async def convert(
     input_files: List[Path],
     output_path: Path,
     from_format: Optional[str] = None,
@@ -261,6 +266,127 @@ async def convert_files(
         await client.disconnect()
 
 
+async def list_available_formats(host: str = "localhost", port: int = 8765) -> bool:
+    """List all available conversion formats from connected agents.
+    
+    Args:
+        host: Network host to connect to
+        port: Network port to connect to
+        
+    Returns:
+        bool: True if discovery succeeded
+    """
+    client = OpenConvertClient()
+    
+    try:
+        # Connect to the network
+        logger.info(f"🌐 Connecting to OpenConvert network at {host}:{port}")
+        print(f"🔍 Discovering available conversion formats...")
+        
+        await client.connect(host=host, port=port)
+        
+        # Common format combinations to test
+        test_formats = [
+            'text/plain', 'text/markdown', 'text/html', 'application/pdf',
+            'image/png', 'image/jpeg', 'image/gif', 'image/bmp',
+            'audio/mp3', 'audio/wav', 'video/mp4', 'application/zip',
+            'application/json', 'application/xml', 'text/csv',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ]
+        
+        # Dictionary to store discovered conversions
+        available_conversions = {}
+        
+        print("📡 Querying agents for conversion capabilities...")
+        
+        # Test various format combinations
+        for source_format in test_formats:
+            available_conversions[source_format] = []
+            for target_format in test_formats:
+                if source_format != target_format:
+                    agents = await client.discover_agents(source_format, target_format)
+                    if agents:
+                        available_conversions[source_format].append(target_format)
+        
+        # Display results
+        print("\n🎯 Available Conversions:")
+        print("=" * 60)
+        
+        total_conversions = 0
+        total_agents = set()
+        
+        for source_format, target_formats in available_conversions.items():
+            if target_formats:
+                # Get a friendly name for the format
+                source_name = get_format_name(source_format)
+                print(f"\n📄 {source_name} ({source_format}):")
+                
+                for target_format in target_formats:
+                    target_name = get_format_name(target_format)
+                    # Get agents for this conversion
+                    agents = await client.discover_agents(source_format, target_format)
+                    agent_names = [agent.get('agent_id', 'Unknown') for agent in agents]
+                    total_agents.update(agent_names)
+                    
+                    print(f"  ➜ {target_name} ({target_format})")
+                    print(f"    Agents: {', '.join(agent_names)}")
+                    total_conversions += 1
+        
+        # Summary
+        print(f"\n📊 Summary:")
+        print(f"   🔄 Total conversions available: {total_conversions}")
+        print(f"   🤖 Active agents: {len(total_agents)}")
+        
+        if total_conversions == 0:
+            print("\n⚠️  No conversion agents found!")
+            print("   Make sure conversion agents are running:")
+            print("   • python demos/openconvert/run_agent.py doc")
+            print("   • python demos/openconvert/run_agent.py image")
+            print("   • python demos/openconvert/run_agent.py audio")
+            
+        return True
+        
+    except Exception as e:
+        logger.error(f"❌ Error during format discovery: {e}")
+        print(f"\n❌ Failed to discover formats: {e}")
+        print("   Make sure the OpenConvert network is running:")
+        print("   openagents launch-network demos/openconvert/network_config.yaml")
+        return False
+        
+    finally:
+        await client.disconnect()
+
+
+def get_format_name(mime_type: str) -> str:
+    """Get a friendly name for a MIME type.
+    
+    Args:
+        mime_type: MIME type string
+        
+    Returns:
+        str: Friendly format name
+    """
+    format_names = {
+        'text/plain': 'Plain Text',
+        'text/markdown': 'Markdown',
+        'text/html': 'HTML',
+        'text/csv': 'CSV',
+        'application/pdf': 'PDF',
+        'application/json': 'JSON',
+        'application/xml': 'XML',
+        'application/zip': 'ZIP Archive',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word Document',
+        'image/png': 'PNG Image',
+        'image/jpeg': 'JPEG Image', 
+        'image/gif': 'GIF Image',
+        'image/bmp': 'BMP Image',
+        'audio/mp3': 'MP3 Audio',
+        'audio/wav': 'WAV Audio',
+        'video/mp4': 'MP4 Video'
+    }
+    return format_names.get(mime_type, mime_type)
+
+
 def main() -> int:
     """Main CLI entry point.
     
@@ -295,15 +421,13 @@ Supported formats include:
         """
     )
     
-    # Required arguments
+    # Arguments (required for conversion, optional for discovery)
     parser.add_argument(
         "-i", "--input",
-        required=True,
         help="Input file or directory path"
     )
     parser.add_argument(
         "-o", "--output", 
-        required=True,
         help="Output file or directory path"
     )
     
@@ -348,6 +472,13 @@ Supported formats include:
         help="Suppress all output except errors"
     )
     
+    # Discovery options
+    parser.add_argument(
+        "--list-formats",
+        action="store_true",
+        help="List all available conversion formats from connected agents"
+    )
+    
     # Parse arguments
     args = parser.parse_args()
     
@@ -357,7 +488,22 @@ Supported formats include:
     elif args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
     
-    # Validate arguments
+    # Handle list-formats option
+    if args.list_formats:
+        try:
+            success = asyncio.run(list_available_formats(
+                host=args.host,
+                port=args.port
+            ))
+            return 0 if success else 1
+        except KeyboardInterrupt:
+            logger.info("Discovery cancelled by user")
+            return 1
+        except Exception as e:
+            logger.error(f"Error discovering formats: {e}")
+            return 1
+    
+    # Validate arguments for conversion operations
     if not validate_args(args):
         return 1
     
@@ -373,7 +519,7 @@ Supported formats include:
     
     # Run conversion
     try:
-        success = asyncio.run(convert_files(
+        success = asyncio.run(convert(
             input_files=input_files,
             output_path=Path(args.output),
             from_format=args.from_format,

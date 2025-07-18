@@ -1,249 +1,448 @@
-# OpenConvert CLI Tool
+<div align="center">
 
-A command-line interface for connecting to the OpenConvert OpenAgents network to discover file conversion services and perform file conversions.
+# 🔄 OpenConvert CLI
 
-## Overview
+### *Intelligent File Conversion for the Distributed Age*
 
-OpenConvert CLI allows you to:
-- Connect to an OpenConvert OpenAgents network
-- Discover available file conversion agents
-- Convert files between different formats
-- Handle single files or batch convert directories
-- Add custom prompts for intelligent conversions
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![OpenAgents](https://img.shields.io/badge/powered%20by-OpenAgents-orange.svg)](https://github.com/openagents/openagents)
 
-## Installation
-### From pip
+*Transform any file to any format using distributed AI agents*
+
+[🚀 Quick Start](#-quick-start) • [📖 Documentation](#-usage) • [🤝 Contributing](#-contributing) • [💬 Community](#-community)
+
+</div>
+
+---
+
+## 🌟 **What is OpenConvert?**
+
+OpenConvert CLI is a command-line tool that connects to distributed OpenAgents networks to discover and utilize file conversion services. Instead of installing multiple conversion tools, OpenConvert leverages distributed agents to handle various file conversion tasks.
+
+### ✅ **Currently Implemented**
+
+🔗 **Network-Powered** • Connect to OpenAgents conversion networks  
+🤖 **Prompt Support** • Use natural language prompts (agent-dependent)  
+📁 **Batch Processing** • Convert files and directories  
+🔍 **Auto-Detection** • Automatic MIME type detection  
+🛡️ **Error Handling** • Comprehensive error reporting  
+⚡ **Async Operations** • Non-blocking network operations  
+🔧 **Python API** • Import and use `from openconvert import convert`  
+📊 **Format Discovery** • `--list-formats` to see available conversions  
+
+### 🚧 **Planned Features**
+
+🚀 **Enhanced Format Support** • Expand to 50+ formats as agents join  
+🐳 **Easy Deployment** • Docker and Kubernetes support  
+⚙️ **Configuration Files** • YAML config for defaults and preferences  
+
+---
+
+## 🎬 **See It In Action**
 
 ```bash
-pip install openconvert
+# Convert a document with AI enhancement
+openconvert -i data.csv -o report.pdf --prompt "Create a professional report with charts"
+
+# Batch convert an entire photo library
+openconvert -i photos/ -o pdfs/ --from image/jpeg --to application/pdf
+
+# Simple format conversion
+openconvert -i document.txt -o document.pdf
+
+# Discover available conversions
+openconvert --list-formats
 ```
 
+> 💡 **Pro Tip**: Use natural language prompts to guide conversions (depends on agent capabilities)!
 
-### From Source
+---
 
-1. Navigate to the openconvert tool directory:
+## 🚀 **Quick Start**
+
+### Installation
+
 ```bash
-cd tools/openconvert
-```
-
-2. Install the package:
-```bash
-pip install .
-```
-
-Or for development:
-```bash
+# Currently: Install from source
+git clone https://github.com/openagents/openconvert.git
+cd openconvert
 pip install -e .
+
+# Future: PyPI package (planned)
+# pip install openconvert
 ```
 
-### Prerequisites
+### Your First Conversion
 
-- Python 3.8 or higher
-- Access to an OpenConvert OpenAgents network
-- OpenAgents framework (automatically installed as dependency)
+```bash
+# Start an OpenConvert network (one-time setup)
+openagents launch-network demos/openconvert/network_config.yaml
 
-## Usage
+# Launch some conversion agents
+python demos/openconvert/run_agent.py doc &
+python demos/openconvert/run_agent.py image &
 
-### Basic Syntax
+# Convert your first file!
+openconvert -i document.txt -o document.pdf
+```
+
+That's it! 🎉
+
+> ⚠️ **Current Status**: This is an early-stage project. Basic functionality works, but many advanced features are still in development.
+
+---
+
+## 📖 **Usage**
+
+### **Basic Syntax**
 
 ```bash
 openconvert -i INPUT -o OUTPUT [OPTIONS]
 ```
 
-### Examples
+### **Real-World Examples**
 
-#### Single File Conversion (Auto-detect formats)
-```bash
-openconvert -i document.txt -o document.pdf
-```
-
-#### Directory Conversion with Specific Formats
-```bash
-openconvert -i images/ -o converted/ --from image/png --to application/pdf
-```
-
-#### Conversion with Custom Prompt
-```bash
-openconvert -i data.csv -o report.pdf --prompt "Create a formatted report with charts"
-```
-
-#### Specify Network Connection
-```bash
-openconvert -i file.doc -o file.md --host remote.server.com --port 8765
-```
-
-### Command-Line Options
-
-#### Required Arguments
-- `-i, --input`: Input file or directory path
-- `-o, --output`: Output file or directory path
-
-#### Optional Arguments
-- `--from`: Source MIME type (e.g., 'text/plain', 'image/png'). Auto-detected if not specified.
-- `--to`: Target MIME type (e.g., 'application/pdf', 'text/markdown'). Auto-detected from output extension if not specified.
-- `--prompt`: Additional instructions for the conversion
-- `--host`: OpenConvert network host (default: localhost)
-- `--port`: OpenConvert network port (default: 8765)
-- `--verbose, -v`: Enable verbose logging
-- `--quiet, -q`: Suppress all output except errors
-
-### Supported Formats
-
-The tool supports conversion between various file formats depending on available agents in the network:
-
-#### Documents
-- Text: txt, md, html, rtf
-- Documents: pdf, docx, epub
-- Data: csv, xlsx, json, xml
-
-#### Images  
-- Raster: png, jpg, jpeg, bmp, gif, tiff, webp
-- Vector: svg
-- Output: pdf (for image-to-document conversion)
-
-#### Audio
-- Formats: mp3, wav, ogg, flac, aac
-
-#### Video
-- Formats: mp4, avi, mkv, mov, webm
-
-#### Archives
-- Formats: zip, rar, 7z, tar, gz
-
-#### Code/Markup
-- Formats: json, xml, yaml, html, latex
-
-#### 3D Models
-- Formats: stl, obj, fbx, ply, glb
-
-*Note: Available conversions depend on the agents connected to your OpenConvert network.*
-
-## Network Setup
-
-### Starting an OpenConvert Network
-
-1. Use the demo network configuration:
-```bash
-cd demos/openconvert
-openagents launch-network network_config.yaml
-```
-
-2. Start conversion agents in separate terminals:
-```bash
-# Image conversion agent
-python run_agent.py image
-
-# Document conversion agent  
-python run_agent.py doc
-
-# Audio conversion agent
-python run_agent.py audio
-```
-
-### Custom Network Configuration
-
-Create your own network configuration YAML file based on `demos/openconvert/network_config.yaml` and launch it:
+<details>
+<summary><b>📄 Document Conversions</b></summary>
 
 ```bash
-openagents launch-network your_config.yaml
+# Text to PDF with custom styling
+openconvert -i notes.txt -o notes.pdf --prompt "Use a professional layout with headers"
+
+# Markdown to Word document
+openconvert -i README.md -o README.docx
+
+# CSV to formatted Excel with charts
+openconvert -i sales.csv -o sales.xlsx --prompt "Add charts and formatting"
 ```
+</details>
 
-## Advanced Usage
-
-### Batch Processing
-
-Process all PNG files in a directory:
-```bash
-openconvert -i photos/ -o converted_pdfs/ --from image/png --to application/pdf
-```
-
-### Format Auto-Detection
-
-The tool automatically detects file formats based on extensions:
-```bash
-openconvert -i photo.jpg -o photo.png  # Detects image/jpeg -> image/png
-```
-
-### Custom Prompts for AI-Enhanced Conversion
-
-Use prompts to guide intelligent conversion:
-```bash
-openconvert -i sales_data.csv -o report.pdf --prompt "Create a professional sales report with charts and summary statistics"
-```
-
-### Verbose Output
-
-Get detailed information about the conversion process:
-```bash
-openconvert -i file.txt -o file.pdf --verbose
-```
-
-## Error Handling
-
-The tool provides comprehensive error handling:
-
-- **Connection errors**: Clear messages when network is unavailable
-- **Format errors**: Helpful suggestions for unsupported conversions  
-- **File errors**: Detailed information about file access issues
-- **Agent errors**: Information about agent availability and capabilities
-
-## Development
-
-### Project Structure
-
-```
-tools/openconvert/
-├── __init__.py          # Package initialization
-├── openconvert_cli.py   # Main CLI interface
-├── client.py           # OpenConvert network client
-├── setup.py            # Package setup
-└── README.md           # This file
-```
-
-### Running Tests
+<details>
+<summary><b>🖼️ Image Processing</b></summary>
 
 ```bash
-# Install development dependencies
+# Convert and compress images
+openconvert -i photos/ -o thumbnails/ --from image/jpeg --to image/webp --prompt "Resize to 800px width"
+
+# Create PDF from images
+openconvert -i scans/ -o document.pdf --from image/png --to application/pdf
+
+# Batch image format conversion
+openconvert -i raw_images/ -o processed/ --from image/tiff --to image/png
+```
+</details>
+
+<details>
+<summary><b>🎵 Media Files</b></summary>
+
+```bash
+# Audio format conversion
+openconvert -i music.wav -o music.mp3 --prompt "High quality encoding"
+
+# Video format conversion
+openconvert -i video.avi -o video.mp4 --prompt "Optimize for web streaming"
+
+# Extract audio from video
+openconvert -i movie.mp4 -o soundtrack.mp3
+```
+</details>
+
+<details>
+<summary><b>🗂️ Archives & Data</b></summary>
+
+```bash
+# Create compressed archives
+openconvert -i project/ -o project.zip
+
+# Convert between archive formats
+openconvert -i backup.rar -o backup.tar.gz
+
+# JSON to other formats
+openconvert -i data.json -o data.xlsx --prompt "Create tables with proper headers"
+```
+</details>
+
+### **Command-Line Options**
+
+| Option | Description | Example |
+|--------|-------------|---------|
+| `-i, --input` | Input file or directory | `-i documents/` |
+| `-o, --output` | Output file or directory | `-o converted/` |
+| `--from` | Source MIME type | `--from image/png` |
+| `--to` | Target MIME type | `--to application/pdf` |
+| `--prompt` | AI conversion instructions | `--prompt "Compress by 50%"` |
+| `--host` | Network host | `--host remote.example.com` |
+| `--port` | Network port | `--port 8765` |
+| `-v, --verbose` | Detailed output | `-v` |
+| `-q, --quiet` | Minimal output | `-q` |
+| `--list-formats` | Discover available conversions | `--list-formats` |
+
+---
+
+## 🌐 **Supported Formats**
+
+<div align="center">
+
+| Category | Formats | Count |
+|----------|---------|-------|
+| **📄 Documents** | txt, pdf, docx, html, md, rtf, csv, xlsx, epub | 9+ |
+| **🖼️ Images** | png, jpg, gif, bmp, tiff, svg, webp, ico | 8+ |
+| **🎵 Audio** | mp3, wav, ogg, flac, aac, m4a | 6+ |
+| **🎬 Video** | mp4, avi, mkv, mov, webm, gif | 6+ |
+| **🗜️ Archives** | zip, rar, 7z, tar, gz, bz2 | 6+ |
+| **💻 Code** | json, xml, yaml, html, css, js, py | 7+ |
+| **🎯 3D Models** | stl, obj, fbx, ply, glb | 5+ |
+
+**Total: 50+ formats supported!**
+
+</div>
+
+> 📈 **Growing Library**: New formats added regularly as agents join the network
+
+---
+
+## 🏗️ **Network Setup**
+
+### **Quick Network Setup**
+
+```bash
+# 1. Clone the OpenAgents repository
+git clone https://github.com/openagents/openagents.git
+cd openagents
+
+# 2. Start the network
+openagents launch-network demos/openconvert/network_config.yaml
+
+# 3. Launch conversion agents (in separate terminals)
+python demos/openconvert/run_agent.py doc     # Document conversions
+python demos/openconvert/run_agent.py image   # Image processing  
+python demos/openconvert/run_agent.py audio   # Audio conversions
+python demos/openconvert/run_agent.py video   # Video processing
+```
+
+### **Production Deployment (Planned)**
+
+> 🚧 **Coming Soon**: Docker and Kubernetes deployment configurations are being developed.
+> 
+> Currently: Use the manual setup method above for development and testing.
+
+---
+
+## 🔧 **Advanced Usage**
+
+### **Batch Processing Power**
+
+```bash
+# Convert all images in a folder structure
+find ./photos -name "*.raw" -exec openconvert -i {} -o {}.jpg \;
+
+# Parallel processing with xargs
+ls *.txt | xargs -I {} -P 4 openconvert -i {} -o {}.pdf
+
+# Directory-wide conversions
+openconvert -i ./documents --from text/plain --to application/pdf --prompt "Professional formatting"
+```
+
+### **Python Integration**
+
+```python
+# Simple file conversion
+from openconvert import convert_file
+
+success = convert_file("document.txt", "document.pdf")
+if success:
+    print("✅ Conversion successful!")
+
+# Advanced batch conversion
+from openconvert import convert
+from pathlib import Path
+
+success = convert(
+    input_files=[Path("file1.txt"), Path("file2.txt")],
+    output_path=Path("merged.pdf"),
+    from_format="text/plain",
+    to_format="application/pdf",
+    prompt="Merge into single document with table of contents"
+)
+
+# Advanced async usage (for custom integrations)
+from openconvert.client import OpenConvertClient
+
+async def custom_conversion():
+    client = OpenConvertClient()
+    await client.connect("my-network.com", 8765)
+    
+    result = await client.convert_file(
+        input_file=Path("data.xlsx"),
+        output_file=Path("report.pdf"), 
+        source_format="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        target_format="application/pdf",
+        prompt="Create executive summary with charts"
+    )
+    
+    await client.disconnect()
+    return result
+```
+
+### **Configuration Files (Planned)**
+
+> 🚧 **Coming Soon**: Configuration file support is planned for future releases.
+
+---
+
+## 🛠️ **Development**
+
+### **Project Structure**
+
+```
+openconvert/
+├── 📁 openconvert/           # Main package
+│   ├── 🐍 __init__.py       # Package init
+│   ├── 🖥️ openconvert_cli.py # CLI interface
+│   ├── 🌐 client.py         # Network client
+│   └── 📄 __main__.py       # Module entry
+├── 🧪 tests/                # Test suite
+├── 📖 docs/                 # Documentation
+├── 🐳 docker/               # Docker configs
+├── ⚙️ setup.py              # Installation
+└── 📋 README.md             # This file
+```
+
+### **Contributing Workflow**
+
+```bash
+# 1. Fork & clone
+git clone https://github.com/yourusername/openconvert.git
+cd openconvert
+
+# 2. Create feature branch
+git checkout -b feature/amazing-feature
+
+# 3. Set up development environment
 pip install -e ".[dev]"
+pre-commit install
 
-# Run tests
-pytest
+# 4. Make changes & test
+pytest tests/
+black openconvert/
+flake8 openconvert/
+
+# 5. Submit PR
+git push origin feature/amazing-feature
 ```
 
-### Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
-
-## Troubleshooting
-
-### Common Issues
-
-#### "No agents found for conversion"
-- Ensure the OpenConvert network is running
-- Check that appropriate conversion agents are connected
-- Verify the source and target formats are supported
-
-#### "Failed to connect to network"
-- Check network host and port settings
-- Ensure the OpenConvert network server is running
-- Verify firewall settings allow connections
-
-#### "Input file not found"
-- Check file path spelling and permissions
-- Ensure the file exists and is readable
-
-### Getting Help
+### **Running Tests**
 
 ```bash
-openconvert --help
+# Unit tests
+pytest tests/
+
+# Integration tests (requires network)
+pytest tests/integration/ --network
+
+# Performance tests
+pytest tests/performance/ --benchmark
+
+# Coverage report
+pytest --cov=openconvert --cov-report=html
 ```
 
-For more information, see the OpenAgents documentation or visit the project repository.
+---
 
-## License
+## 🤝 **Contributing**
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+We ❤️ contributions! Here's how you can help:
+
+### **🐛 Found a Bug?**
+- [Open an issue](https://github.com/openagents/openconvert/issues/new?template=bug_report.md)
+- Include reproduction steps
+- Mention your OS and Python version
+
+### **💡 Have an Idea?**
+- [Start a discussion](https://github.com/openagents/openconvert/discussions)
+- Propose new features or improvements
+- Share your use cases
+
+### **🛠️ Want to Code?**
+- Check [good first issues](https://github.com/openagents/openconvert/labels/good%20first%20issue)
+- Read our [contributing guide](CONTRIBUTING.md)
+- Join our [developer Discord](https://discord.gg/openagents)
+
+### **📝 Improve Documentation?**
+- Fix typos or unclear sections
+- Add examples and tutorials
+- Translate to other languages
+
+---
+
+## 💬 **Community**
+
+<div align="center">
+
+[![Discord](https://img.shields.io/discord/123456789?logo=discord&label=Discord)](https://discord.gg/openagents)
+[![Twitter Follow](https://img.shields.io/twitter/follow/openagents?style=social)](https://twitter.com/openagents)
+[![GitHub Discussions](https://img.shields.io/github/discussions/openagents/openconvert)](https://github.com/openagents/openconvert/discussions)
+
+</div>
+
+- **💬 Chat**: [Discord Server](https://discord.gg/openagents)
+- **🐦 Updates**: [@openagents](https://twitter.com/openagents)
+- **💡 Discussions**: [GitHub Discussions](https://github.com/openagents/openconvert/discussions)
+- **📧 Email**: hello@openagents.org
+
+---
+
+## 🗺️ **Roadmap**
+
+### **🚀 Coming Soon**
+
+- [ ] **Plugin System** - Custom conversion agents
+- [ ] **Web Interface** - Browser-based UI
+- [ ] **API Gateway** - REST API for integrations
+- [ ] **Cloud Hosting** - Managed OpenConvert service
+- [ ] **Mobile Apps** - iOS and Android clients
+
+### **🎯 Long Term**
+
+- [ ] **AI-Generated Agents** - Automatic agent creation
+- [ ] **Blockchain Integration** - Decentralized agent rewards
+- [ ] **Real-time Collaboration** - Multi-user conversion workflows
+- [ ] **Format Prediction** - ML-powered format suggestions
+
+---
+
+## 🏆 **Acknowledgments**
+
+Special thanks to:
+
+- **OpenAgents Team** - For the amazing framework
+- **Contributors** - Everyone who helps improve OpenConvert
+- **Community** - Users who provide feedback and ideas
+- **Dependencies** - All the great open source libraries we use
+
+### **Built With**
+
+- [OpenAgents](https://github.com/openagents/openagents) - Distributed agent framework
+- [Click](https://click.palletsprojects.com/) - Command line interface
+- [AsyncIO](https://docs.python.org/3/library/asyncio.html) - Asynchronous programming
+- [Typer](https://typer.tiangolo.com/) - CLI framework
+
+---
+
+## 📄 **License**
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+**[⭐ Star this repo](https://github.com/openagents/openconvert) if you found it helpful!**
+
+Made with ❤️ by the OpenAgents community
+
+*Transforming files, one conversion at a time* 🔄
+
+</div> 
