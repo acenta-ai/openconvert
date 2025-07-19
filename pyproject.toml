@@ -78,6 +78,7 @@ openconvert = "openconvert.openconvert_cli:main"
 include-package-data = true
 
 [tool.setuptools.packages.find]
+where = ["src"]
 include = ["openconvert*"]
 
 [tool.setuptools.dynamic]
@@ -115,6 +116,8 @@ warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
 strict_equality = true
+# mypy needs to know the package path for src layout
+mypy_path = "src"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -122,4 +125,6 @@ addopts = "-ra -q"
 testpaths = [
     "tests",
 ]
-asyncio_mode = "auto" 
+asyncio_mode = "auto"
+# pytest needs to know where to find the package
+pythonpath = ["src"] 

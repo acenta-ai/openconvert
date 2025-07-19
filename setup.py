@@ -15,7 +15,7 @@ def read_readme():
 
 # Get version from __init__.py
 def get_version():
-    init_path = os.path.join(os.path.dirname(__file__), "openconvert", "__init__.py")
+    init_path = os.path.join(os.path.dirname(__file__), "src", "openconvert", "__init__.py")
     with open(init_path, "r", encoding="utf-8") as f:
         content = f.read()
         version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", content, re.M)
@@ -39,7 +39,8 @@ setup(
         "Source": "https://github.com/acenta-ai/openconvert",
         "Documentation": "https://openconvert.readthedocs.io/",
     },
-    packages=find_packages(),
+    package_dir={"": "src"},
+    packages=find_packages(where="src"),
     include_package_data=True,
     install_requires=[
         "pyyaml>=5.4.0",

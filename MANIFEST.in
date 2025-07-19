@@ -10,6 +10,9 @@ include .readthedocs.yaml
 # Include scripts
 recursive-include scripts *.py *.sh *.md
 
+# Include source code (src layout)
+recursive-include src *.py
+
 # Exclude unnecessary files
 global-exclude *.pyc
 global-exclude __pycache__

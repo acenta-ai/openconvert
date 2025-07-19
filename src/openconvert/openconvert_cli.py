@@ -25,10 +25,7 @@ current_dir = Path(__file__).resolve().parent
 openagents_root = current_dir.parent.parent
 sys.path.insert(0, str(openagents_root / "src"))
 
-try:
-    from .client import OpenConvertClient
-except ImportError:
-    from client import OpenConvertClient
+from openconvert.client import OpenConvertClient
 
 # Set up logging
 logging.basicConfig(
