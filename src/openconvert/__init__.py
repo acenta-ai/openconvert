@@ -9,7 +9,7 @@ import asyncio
 from pathlib import Path
 from typing import Optional, List
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __author__ = "OpenAgents Team"
 __email__ = "team@openagents.com"
 
