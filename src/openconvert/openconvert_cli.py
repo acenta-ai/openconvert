@@ -86,7 +86,9 @@ def validate_args(args: argparse.Namespace) -> bool:
     """
     # For conversion operations, input and output are required
     if not args.input or not args.output:
-        logger.error("Input (-i) and output (-o) arguments are required for conversion")
+        logger.error("Input and output are required for conversion")
+        logger.error("Usage: openconvert <input> <output>")
+        logger.error("   or: openconvert -i <input> -o <output>")
         return False
     
     # Check input exists
@@ -102,10 +104,17 @@ def validate_args(args: argparse.Namespace) -> bool:
         logger.error(f"Output directory does not exist: {output_dir}")
         return False
     
-    # If input is a directory, require --from and --to
+    # If input is a directory, require --from and --to (positional args don't support directory conversion)
     if input_path.is_dir():
         if not args.from_format or not args.to_format:
             logger.error("When input is a directory, --from and --to formats must be specified")
+            logger.error("Example: openconvert -i docs/ -o converted/ --from text/plain --to application/pdf")
+            return False
+        
+        # For directory conversion, must use flag arguments
+        if hasattr(args, 'input_file') and (args.input_file or args.output_file):
+            logger.error("Directory conversion requires -i and -o flags, not positional arguments")
+            logger.error("Example: openconvert -i docs/ -o converted/ --from text/plain --to application/pdf")
             return False
     
     return True
@@ -388,24 +397,36 @@ def main() -> int:
     """Main CLI entry point.
     
     Returns:
-        int: Exit code (0 = success, 1 = error)
+        int: Exit code (0 for success, 1 for error)
     """
     parser = argparse.ArgumentParser(
-        description="OpenConvert CLI - Connect to OpenAgents network for file conversion",
+        prog="openconvert",
+        description="Connect to OpenConvert OpenAgents network for file conversions",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
+        epilog=f"""
 Examples:
-  # Convert single file (formats auto-detected)
-  openconvert -i document.txt -o document.pdf
+  # Simple file conversion (positional arguments)
+  openconvert input.txt output.pdf
+  openconvert image.png image.jpg
   
-  # Convert directory with specific formats
-  openconvert -i images/ -o converted/ --from image/png --to application/pdf
+  # Using flags (traditional way)  
+  openconvert -i input.txt -o output.pdf
+  openconvert -i image.png -o image.jpg
+  
+  # Directory conversion (requires format specification)
+  openconvert -i docs/ -o converted/ --from text/plain --to application/pdf
+  
+  # Convert with format specification
+  openconvert input.data output.pdf --from text/csv --to application/pdf
   
   # Convert with custom prompt
-  openconvert -i data.csv -o report.pdf --prompt "Create a formatted report with charts"
+  openconvert data.csv report.pdf --prompt "Create a formatted report with charts"
   
   # Specify network connection
-  openconvert -i file.doc -o file.md --host remote.server.com --port 8765
+  openconvert file.doc file.md --host remote.server.com --port 8765
+  
+  # List available formats
+  openconvert --list-formats
 
 Supported formats include:
   Documents: txt, pdf, docx, html, md, rtf, csv, xlsx
@@ -418,7 +439,19 @@ Supported formats include:
         """
     )
     
-    # Arguments (required for conversion, optional for discovery)
+    # Positional arguments (optional)
+    parser.add_argument(
+        "input_file",
+        nargs="?",
+        help="Input file path (alternative to -i/--input)"
+    )
+    parser.add_argument(
+        "output_file", 
+        nargs="?",
+        help="Output file path (alternative to -o/--output)"
+    )
+    
+    # Traditional flag arguments (for backward compatibility and directory operations)
     parser.add_argument(
         "-i", "--input",
         help="Input file or directory path"
@@ -478,6 +511,12 @@ Supported formats include:
     
     # Parse arguments
     args = parser.parse_args()
+    
+    # Merge positional and flag arguments (positional takes precedence)
+    if args.input_file:
+        args.input = args.input_file
+    if args.output_file:
+        args.output = args.output_file
     
     # Configure logging level
     if args.quiet:
